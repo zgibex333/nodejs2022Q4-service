@@ -1,15 +1,8 @@
+import { ChangeTrackDTO } from 'src/tracks/dto/changeTrack.dto';
+import { CreateTrackDTO } from 'src/tracks/dto/createTrack.dto';
+import { TrackEntity } from 'src/tracks/track.interface';
 import { v4 as uuidv4 } from 'uuid';
 import DBEntity from './DBEntity';
-
-export type TrackEntity = {
-  id: string; // uuid v4
-  name: string;
-  artistId: string | null; // refers to Artist
-  albumId: string | null; // refers to Album
-  duration: number; // integer number
-};
-type CreateTrackDTO = Omit<TrackEntity, 'id'>;
-type ChangeTrackDTO = Omit<TrackEntity, 'id'>;
 
 export default class DBTracks extends DBEntity<
   TrackEntity,
