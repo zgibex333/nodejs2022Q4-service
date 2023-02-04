@@ -2,6 +2,12 @@
 
 ## Чтобы запустить сервер используются следующие команды
 ```
+git clone https://github.com/zgibex333/nodejs2022Q4-service.git 
+
+cd nodejs2022Q4-service 
+
+npm install
+
 npm run start:dev - запуск в live режиме
 npm run start - запуск в обычном режиме 
 ```
