@@ -49,7 +49,7 @@ export class AlbumService {
       key: 'albumId',
       equals: album.id,
     });
-    console.log(tracks, 'tracks');
+
     await Promise.all(
       tracks.map(
         async (track) =>
