@@ -23,7 +23,7 @@ export class UsersController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Get()
   find(): Promise<UserEntity[]> {
-    return this.userService.find();
+    return this.userService.findMany();
   }
 
   @UseInterceptors(ClassSerializerInterceptor)

@@ -1,7 +1,6 @@
 import {
   ForbiddenException,
   Injectable,
-  NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
 import DB from 'src/db/db';

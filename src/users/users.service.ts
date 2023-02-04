@@ -11,7 +11,7 @@ import { UserEntity } from './users.interface';
 @Injectable()
 export class UsersService {
   constructor(private readonly db: DB) {}
-  async find() {
+  async findMany() {
     const users = await this.db.users.findMany();
 
     return users.map((user) => new UserEntity(user));
