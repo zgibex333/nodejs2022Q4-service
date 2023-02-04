@@ -49,7 +49,7 @@ export class ArtistService {
           await this.db.albums.change(album.id, { ...album, artistId: null }),
       ),
     );
-
+    await this.db.favourites.removeFromArtists(id);
     return await this.db.artists.delete(id);
   }
 }

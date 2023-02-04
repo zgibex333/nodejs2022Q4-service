@@ -52,7 +52,7 @@ export class TrackService {
     const track = await this.db.tracks.findOne({ key: 'id', equals: id });
     console.log('FOUND', track);
     if (!track) throw new NotFoundException();
-
+    await this.db.favourites.removeFromTracks(id);
     return await this.db.tracks.delete(id);
   }
 }
