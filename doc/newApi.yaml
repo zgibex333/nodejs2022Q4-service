@@ -639,7 +639,7 @@ info:
   contact: {}
 tags: []
 servers:
-  - url: '/'
+  - url: 'http://localhost:4000/'
 components:
   schemas:
     UserEntity:
