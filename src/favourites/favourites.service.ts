@@ -4,88 +4,128 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import DB from 'src/db/db';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class FavouritesService {
-  constructor(private readonly db: DB) {}
+  constructor(
+    private readonly db: DB,
+    private readonly prisma: PrismaService,
+  ) {}
 
   async findMany() {
-    const favsIdsObject = await this.db.favourites.getFavs();
-    const { albums, artists, tracks } = favsIdsObject;
-    const response = {
-      albums: await Promise.all(
-        albums.map(async (albumId) => {
-          return await this.db.albums.findOne({ key: 'id', equals: albumId });
-        }),
-      ),
-      artists: await Promise.all(
-        artists.map(async (artistId) => {
-          return await this.db.artists.findOne({ key: 'id', equals: artistId });
-        }),
-      ),
-      tracks: await Promise.all(
-        tracks.map(async (trackId) => {
-          return await this.db.tracks.findOne({ key: 'id', equals: trackId });
-        }),
-      ),
+    return {
+      albums: (
+        await this.prisma.favAlbum.findMany({
+          select: {
+            album: true,
+          },
+        })
+      ).map((item) => item.album),
+      tracks: (
+        await this.prisma.favTrack.findMany({
+          select: {
+            track: true,
+          },
+        })
+      ).map((item) => item.track),
+      artists: (
+        await this.prisma.favArtist.findMany({
+          select: {
+            artist: true,
+          },
+        })
+      ).map((item) => item.artist),
     };
-    return response;
   }
 
   async changeFavTracks(id: string) {
-    const track = await this.db.tracks.findOne({ key: 'id', equals: id });
+    const track = await this.prisma.track.findUnique({
+      where: {
+        id,
+      },
+    });
     if (!track) throw new UnprocessableEntityException();
-    const favsIdsObject = await this.db.favourites.getFavs();
-    const duplicate = favsIdsObject.tracks.find((id) => id === track.id);
-    if (duplicate) {
+    try {
+      await this.prisma.favTrack.create({
+        data: {
+          id,
+        },
+      });
+      return { messsage: `Track with ID:${id} was added to favs` };
+    } catch {
       throw new ForbiddenException();
     }
-    await this.db.favourites.addToTracks(id);
-    return { messsage: `Track with ID:${id} was added to favs` };
   }
 
   async changeFavAlbums(id: string) {
-    const album = await this.db.albums.findOne({ key: 'id', equals: id });
+    const album = await this.prisma.album.findUnique({
+      where: {
+        id,
+      },
+    });
     if (!album) throw new UnprocessableEntityException();
-    const favsIdsObject = await this.db.favourites.getFavs();
-    const duplicate = favsIdsObject.albums.find((id) => id === album.id);
-    if (duplicate) {
+    try {
+      await this.prisma.favAlbum.create({
+        data: {
+          id,
+        },
+      });
+      return { messsage: `Album with ID:${id} was added to favs` };
+    } catch {
       throw new ForbiddenException();
     }
-    await this.db.favourites.addToAlbums(id);
-    return { messsage: `Album with ID:${id} was added to favs` };
   }
 
   async changeFavArtists(id: string) {
-    const artist = await this.db.artists.findOne({ key: 'id', equals: id });
+    const artist = await this.prisma.artist.findUnique({
+      where: {
+        id,
+      },
+    });
     if (!artist) throw new UnprocessableEntityException();
-    const favsIdsObject = await this.db.favourites.getFavs();
-    const duplicate = favsIdsObject.artists.find((id) => id === artist.id);
-    if (duplicate) {
+    try {
+      await this.prisma.favArtist.create({
+        data: {
+          id,
+        },
+      });
+      return { messsage: `Artist with ID:${id} was added to favs` };
+    } catch {
       throw new ForbiddenException();
     }
-    await this.db.favourites.addToArtists(id);
-    return { messsage: `Artist with ID:${id} was added to favs` };
   }
 
   async deleteFavTrack(id: string) {
-    const track = await this.db.tracks.findOne({ key: 'id', equals: id });
+    const track = await this.prisma.track.findUnique({
+      where: { id },
+    });
     if (!track) throw new UnprocessableEntityException();
-    await this.db.favourites.removeFromTracks(id);
+    await this.prisma.favTrack.delete({
+      where: { id },
+    });
     return { messsage: `Track with ID:${id} was deleted from favs` };
   }
 
   async deleteFavAlbum(id: string) {
-    const album = await this.db.albums.findOne({ key: 'id', equals: id });
+    const album = await this.prisma.album.findUnique({
+      where: { id },
+    });
     if (!album) throw new UnprocessableEntityException();
-    await this.db.favourites.removeFromAlbums(id);
+    await this.prisma.favAlbum.delete({
+      where: { id },
+    });
     return { messsage: `Album with ID:${id} was deleted from favs` };
   }
 
   async deleteFavArtist(id: string) {
-    const artist = await this.db.artists.findOne({ key: 'id', equals: id });
+    const artist = await this.prisma.artist.findUnique({
+      where: { id },
+    });
     if (!artist) throw new UnprocessableEntityException();
-    await this.db.favourites.removeFromArtists(id);
+    await this.prisma.favArtist.delete({
+      where: { id },
+    });
     return { messsage: `Artist with ID:${id} was deleted from favs` };
   }
 }
