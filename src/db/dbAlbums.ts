@@ -2,7 +2,7 @@ import { AlbumEntity } from 'src/albums/album.interface';
 import { ChangeAlbumDTO } from 'src/albums/dto/changeAlbum.dto';
 import { CreateAlbumDTO } from 'src/albums/dto/createAlbum.dto';
 import { v4 as uuidv4 } from 'uuid';
-import DBEntity from './DBEntity';
+import DBEntity from './dbEntity';
 
 export default class DBAlbums extends DBEntity<
   AlbumEntity,

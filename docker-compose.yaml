@@ -1,15 +1,31 @@
 version: '3.8'
 services:
-  dev-db:
-    image: postgres:13
+  api:
+    container_name: nest
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: .
+    depends_on: 
+      - postgres
+    env_file:
+      - .env
+    ports: 
+      - 3000:4000
+    networks: 
+      - hsl
+  postgres:
     container_name: postrgres
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./docker-postgres/
     ports:
       - 5432:5432
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 123
-      POSTGRES_DB: nest
-    networks:
-      - hls
-networks:
-  hls:
+    env_file:
+      - db.env
+    networks: 
+      - hsl
+networks: 
+  hsl: 
+    driver: bridge
