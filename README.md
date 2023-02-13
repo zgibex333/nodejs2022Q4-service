@@ -2,12 +2,18 @@
 
 ## Чтобы запустить задание с Postgres и Docker
 #  Обязательным условием является установленный на ПК Docker (у меня Docker Desktop)
+
 ```
 git clone https://github.com/zgibex333/nodejs2022Q4-service.git 
 
 git checkout develop-branch
 
+!!! Обязательно создать .env из .env.example
+
 docker compose up
+
+После запуска приложение доступно на localhost:4000
+
 ```
 
 
