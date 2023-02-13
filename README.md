@@ -1,5 +1,16 @@
 # Home Library Service
 
+## Чтобы запустить задание с Postgres и Docker
+#  Обязательным условием является установленный на ПК Docker (у меня Docker Desktop)
+```
+git clone https://github.com/zgibex333/nodejs2022Q4-service.git 
+
+git checkout develop-branch
+
+docker compose up
+```
+
+
 ## Чтобы запустить сервер используются следующие команды
 ```
 git clone https://github.com/zgibex333/nodejs2022Q4-service.git 

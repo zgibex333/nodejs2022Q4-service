@@ -6,13 +6,13 @@ services:
     build:
       dockerfile: Dockerfile
       context: .
-    depends_on: 
+    depends_on:
       - postgres
     env_file:
       - .env
-    ports: 
+    ports:
       - 3000:4000
-    networks: 
+    networks:
       - hsl
   postgres:
     container_name: postrgres
@@ -24,8 +24,8 @@ services:
       - 5432:5432
     env_file:
       - db.env
-    networks: 
+    networks:
       - hsl
-networks: 
-  hsl: 
+networks:
+  hsl:
     driver: bridge
