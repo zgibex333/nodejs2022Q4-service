@@ -6,13 +6,19 @@
 ```
 git clone https://github.com/zgibex333/nodejs2022Q4-service.git 
 
+cd nodejs2022Q4-service
+
 git checkout develop-branch
 
 !!! Обязательно создать .env из .env.example
 
 docker compose up
 
-После запуска приложение доступно на localhost:4000
+Дождаться логов от nest dev мода - и можно тестить, например через localhost:4000/api и сваггер
+
+После запуска приложение доступно на localhost:4000 + эндпоинты
+
+
 
 ```
 
