@@ -66,3 +66,8 @@ model FavAlbum {
   id    String @id @unique
   album Album  @relation(fields: [id], references: [id], onDelete: Cascade)
 }
+
+model UserWithToken {
+  id String @id @unique
+  refreshToken String
+}
