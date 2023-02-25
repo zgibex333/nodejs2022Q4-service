@@ -1,4 +1,8 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { SignUpDTO } from './dto/signup.dto';
 import * as bcrypt from 'bcrypt';
@@ -52,8 +56,29 @@ export class AuthService {
       refreshToken,
     };
   }
-  refresh() {
-    return '3';
+  async refresh(userId: string, rt: string) {
+    const userWithRt = await this.prisma.userWithToken.findFirst({
+      where: {
+        id: userId,
+      },
+    });
+    if (!userWithRt) throw new ForbiddenException();
+    const rtIsValid = await bcrypt.compare(rt, userWithRt.refreshToken);
+    if (!rtIsValid) throw new UnauthorizedException();
+    const user = await this.usersService.findOne(userId);
+    const accessToken = await this.generateToken(
+      user.id,
+      user.login,
+      process.env.TOKEN_EXPIRE_TIME,
+      process.env.JWT_SECRET_KEY,
+    );
+    const refreshToken = await this.generateToken(
+      user.id,
+      user.login,
+      process.env.TOKEN_REFRESH_EXPIRE_TIME,
+      process.env.JWT_SECRET_REFRESH_KEY,
+    );
+    return { accessToken, refreshToken };
   }
 
   async hashData(data: string) {

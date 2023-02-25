@@ -3,10 +3,14 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Post,
+  Req,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { SignUpDTO } from './dto/signup.dto';
+import { Request } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -21,8 +25,10 @@ export class AuthController {
   login(@Body() dto: SignUpDTO) {
     return this.authService.login(dto);
   }
+  @UseGuards(AuthGuard('jwt-refresh'))
   @Post('refresh')
-  refresh() {
-    return this.authService.refresh();
+  refresh(@Req() req: Request) {
+    const user = req.user;
+    return this.authService.refresh(user['id'], user['refreshToken']);
   }
 }
