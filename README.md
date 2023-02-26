@@ -7,6 +7,8 @@ git clone https://github.com/zgibex333/nodejs2022Q4-service.git
 
 cd nodejs2022Q4-service
 
+npm install
+
 <!-- запустите базу данных в контейнере -->
 docker-compose up 
 
