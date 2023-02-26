@@ -9,6 +9,8 @@ cd nodejs2022Q4-service
 
 git checkout auth-develop
 
+создайте .env на основе .env-example
+
 npm install
 
 <!-- запустите базу данных в контейнере -->
