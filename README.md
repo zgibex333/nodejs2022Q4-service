@@ -1,5 +1,64 @@
 # Home Library Service
 
+## Чтобы запустить задание с Postgres и Docker
+#  Обязательным условием является установленный на ПК Docker (у меня Docker Desktop)
+
+```
+git clone https://github.com/zgibex333/nodejs2022Q4-service.git 
+
+cd nodejs2022Q4-service
+
+git checkout develop-branch
+
+!!! Обязательно создать .env из .env.example
+
+docker compose up
+
+Дождаться логов от nest dev мода - и можно тестить, например через localhost:4000/api и сваггер
+
+После запуска приложение доступно на localhost:4000 + эндпоинты
+
+Изменение в ридми после дедлайна (добавляю, потому что человек написал в лс о том как запустить тесты): 
+открыть приложение в новом терминале, npm install и потом npm run test 
+все тесты проходят
+
+
+
+```
+
+НИЖЕ README из предыдущих заданий
+
+## Чтобы запустить сервер используются следующие команды
+```
+git clone https://github.com/zgibex333/nodejs2022Q4-service.git 
+
+cd nodejs2022Q4-service 
+
+git checkout development
+
+npm install
+
+npm run start:dev - запуск в live режиме
+npm run start - запуск в обычном режиме 
+```
+## ENV VARIABLE
+Чтобы ENV переменные работали, создайте файл в корне .env и перенесите в него данные из .env.example. Тогда порт для запуска сервера будет взят из .env файла
+
+## Тесты 
+Тесты следует запускать, когда сервер работает, т.е. в новом терминале, не закрывая тот в котором запущен сервер
+```
+npm run test - запускает тесты
+```
+
+## Документация и работа сервера
+Swagger документация будет доступна при запущенном сервере по адресу `http://localhost:${PORT}/api`
+Там же можно отправлять запросы, получать ответы и таким образом тестить задание
+
+Также, в папке doc находится файл `newApi.yaml` со схемой для swagger. Если хотите тестить в каком-нибудь swagger editor, тогда нужно на `642` строке убедиться, что `http://localhost:${PORT}/` корректный (если вдруг меняли переменную в .env)<br>
+![screenshot](https://i.ibb.co/Hxqy2dh/swagger.png)<br>
+Поэтому чтобы не заморчиваться, просто используйте `http://localhost:${PORT}/api` в браузере, и все будет работать!
+
+Далее дока от RS School
 ## Prerequisites
 
 - Git - [Download & Install Git](https://git-scm.com/downloads).

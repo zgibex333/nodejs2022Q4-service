@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  api:
+    container_name: nest
+    restart: on-failure
+    build:
+      dockerfile: Dockerfile
+      context: .
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    ports:
+      - 4000:4000
+    command: "npm run start:docker"
+    networks:
+      - hsl
+  postgres:
+    container_name: postrgres
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./docker-postgres/
+    ports:
+      - 5432:5432
+    env_file:
+      - db.env
+    networks:
+      - hsl
+networks:
+  hsl:
+    driver: bridge
