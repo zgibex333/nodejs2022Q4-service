@@ -24,7 +24,7 @@ export class AuthService {
       password: hash,
     });
 
-    return `User has been signed up. Your id is : ${newUser.id}`;
+    return newUser;
   }
   async login(dto: SignUpDTO) {
     const user = await this.prisma.user.findFirst({
@@ -78,6 +78,7 @@ export class AuthService {
       process.env.TOKEN_REFRESH_EXPIRE_TIME,
       process.env.JWT_SECRET_REFRESH_KEY,
     );
+    await this.updateRtHash(user.id, refreshToken);
     return { accessToken, refreshToken };
   }
 

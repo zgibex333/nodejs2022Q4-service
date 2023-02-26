@@ -11,7 +11,7 @@ export class AtStrategy extends PassportStrategy(Strategy, 'jwt') {
       secretOrKey: process.env.JWT_SECRET_KEY,
     });
   }
-  validate(payload) {
+  validate(payload) { 
     return payload;
   }
 }
