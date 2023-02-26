@@ -83,7 +83,7 @@ export class AuthService {
   }
 
   async hashData(data: string) {
-    return await bcrypt.hash(data, 10);
+    return await bcrypt.hash(data, +process.env.CRYPT_SALT);
   }
 
   async generateToken(

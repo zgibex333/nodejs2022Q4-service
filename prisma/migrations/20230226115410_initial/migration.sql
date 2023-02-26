@@ -61,8 +61,19 @@ CREATE TABLE "FavAlbum" (
     CONSTRAINT "FavAlbum_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "UserWithToken" (
+    "id" TEXT NOT NULL,
+    "refreshToken" TEXT NOT NULL,
+
+    CONSTRAINT "UserWithToken_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "FavAlbum_id_key" ON "FavAlbum"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "UserWithToken_id_key" ON "UserWithToken"("id");
 
 -- AddForeignKey
 ALTER TABLE "Album" ADD CONSTRAINT "Album_artistId_fkey" FOREIGN KEY ("artistId") REFERENCES "Artist"("id") ON DELETE SET NULL ON UPDATE CASCADE;
