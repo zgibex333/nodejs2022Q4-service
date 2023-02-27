@@ -14,6 +14,7 @@ import { SignUpDTO } from './dto/signup.dto';
 import { Request } from 'express';
 import { Public } from '../decorators/public.decorator';
 import { RefreshTokenDto } from './dto/refreshToken.dto';
+import { RJWTAuthGuard } from './guards/RJWTAuthGuard';
 
 @Controller('auth')
 export class AuthController {
@@ -33,7 +34,7 @@ export class AuthController {
   }
   @HttpCode(200)
   @Public()
-  @UseGuards(AuthGuard('jwt-refresh'))
+  @UseGuards(RJWTAuthGuard)
   @Post('refresh')
   refresh(@Body() dto: RefreshTokenDto, @Req() req: Request) {
     const user = req.user;
