@@ -8,6 +8,7 @@ import { SignUpDTO } from './dto/signup.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
+import { RefreshTokenDto } from './dto/refreshToken.dto';
 
 @Injectable()
 export class AuthService {
@@ -50,21 +51,28 @@ export class AuthService {
       process.env.TOKEN_REFRESH_EXPIRE_TIME,
       process.env.JWT_SECRET_REFRESH_KEY,
     );
+    
     await this.updateRtHash(user.id, refreshToken);
     return {
       accessToken,
       refreshToken,
     };
   }
-  async refresh(userId: string, rt: string) {
+  async refresh(dto: RefreshTokenDto, userId: string, rt: string) {
     const userWithRt = await this.prisma.userWithToken.findFirst({
       where: {
         id: userId,
       },
     });
+    const { refreshToken: rToken } = dto;
+    if (!rToken) throw new UnauthorizedException();
+    const bodyTokenIsValid = await bcrypt.compare(rToken, userWithRt.refreshToken);
+    if (!bodyTokenIsValid || rToken !== rt) throw new ForbiddenException();
+
     if (!userWithRt) throw new ForbiddenException();
-    const rtIsValid = await bcrypt.compare(rt, userWithRt.refreshToken);
-    if (!rtIsValid) throw new UnauthorizedException();
+    const rtIsExistingInDB = await bcrypt.compare(rt, userWithRt.refreshToken);
+    if (!rtIsExistingInDB) throw new ForbiddenException();
+
     const user = await this.usersService.findOne(userId);
     const accessToken = await this.generateToken(
       user.id,
