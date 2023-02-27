@@ -9,13 +9,20 @@ import { JsonWebTokenError } from 'jsonwebtoken';
 @Injectable()
 export class RJWTAuthGuard extends AuthGuard('jwt-refresh') {
   handleRequest(err: any, user: any, info: any, context: any, status: any) {
-
-    if (typeof context.args[0].body.refreshToken === 'undefined') {
+    const headerToken = context.args[0].headers['authorization'] ?? context.args[0].headers['Authorization']
+    const bodyToken = context.args[0].body.refreshToken
+    if (typeof bodyToken === 'undefined') {
       throw new UnauthorizedException('Body doesnt have Token!');
     }
 
-    if (typeof context.args[0].body.refreshToken !== "string") {
-      throw new ForbiddenException();
+    if (typeof bodyToken !== "string") {
+      throw new ForbiddenException("Wrong token format");
+    }
+    console.log(bodyToken, "bodyToken");
+    console.log(headerToken, "headerToken");
+    
+    if(`Bearer ${bodyToken}` !== headerToken) {
+      throw new ForbiddenException('Body and header tokens should be equal!');
     }
 
     if (
