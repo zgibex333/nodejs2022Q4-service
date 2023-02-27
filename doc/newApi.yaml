@@ -1,0 +1,850 @@
+openapi: 3.0.0
+paths:
+  '/user':
+    get:
+      operationId: UsersController_find
+      summary: Get all users
+      description: Gets all users
+      parameters: []
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  '$ref': '#/components/schemas/UserEntity'
+        '401':
+          description: Access token is missing or invalid
+      tags:
+        - Users
+    post:
+      operationId: UsersController_create
+      summary: Create user
+      description: Creates a new user
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/CreateUserDTO'
+      responses:
+        '201':
+          description: The user has been created.
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/UserEntity'
+        '400':
+          description: Bad request. body does not contain required fields
+        '401':
+          description: Access token is missing or invalid
+      tags:
+        - Users
+  '/user/{userId}':
+    get:
+      operationId: UsersController_findOne
+      summary: Get single user by id
+      description: Get single user by id
+      parameters:
+        - name: userId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/UserEntity'
+        '400':
+          description: Bad request. userId is invalid (not uuid)
+        '401':
+          description: Access token is missing or invalid
+        '404':
+          description: User not found
+      tags:
+        - Users
+    put:
+      operationId: UsersController_changePassword
+      summary: Update a user's password
+      description: Updates a user's password by ID
+      parameters:
+        - name: userId
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/UpdatePasswordDto'
+      responses:
+        '200':
+          description: The user has been updated.
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/UserEntity'
+        '400':
+          description: Bad request. userId is invalid (not uuid)
+        '401':
+          description: Access token is missing or invalid
+        '403':
+          description: OldPassowrd is wrong
+        '404':
+          description: User not found
+      tags:
+        - Users
+    delete:
+      operationId: UsersController_deleteUser
+      summary: Delete user
+      description: Deletes user by ID.
+      parameters:
+        - name: userId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '204':
+          description: The user has been deleted
+        '400':
+          description: Bad request. userId is invalid (not uuid)
+        '401':
+          description: Access token is missing or invalid
+        '404':
+          description: User not found
+      tags:
+        - Users
+  '/track':
+    get:
+      operationId: TrackController_findMany
+      summary: Get tracks list
+      description: Gets all library tracks list
+      parameters: []
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  '$ref': '#/components/schemas/TrackEntity'
+        '401':
+          description: Access token is missing or invalid
+      tags:
+        - Track
+    post:
+      operationId: TrackController_create
+      summary: Add new track
+      description: Add new track information
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/CreateTrackDTO'
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/TrackEntity'
+        '400':
+          description: Bad request. body does not contain required fields
+        '401':
+          description: Access token is missing or invalid
+      tags:
+        - Track
+  '/track/{id}':
+    get:
+      operationId: TrackController_findOne
+      summary: Get single track by id
+      description: Gets single track by id
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/TrackEntity'
+        '400':
+          description: Bad request. trackId is invalid (not uuid)
+        '401':
+          description: Access token is missing or invalid
+        '404':
+          description: Track was not found
+      tags:
+        - Track
+    put:
+      operationId: TrackController_change
+      summary: Update track information
+      description: Update library track information by UUID
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/ChangeTrackDTO'
+      responses:
+        '200':
+          description: The track has been updated.
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/TrackEntity'
+        '400':
+          description: Bad request. trackId is invalid (not uuid)
+        '401':
+          description: Access token is missing or invalid
+        '404':
+          description: Track was not found
+      tags:
+        - Track
+    delete:
+      operationId: TrackController_delete
+      summary: Delete track
+      description: Delete track from library
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleled succesfully
+        '400':
+          description: Bad request. trackId is invalid (not uuid)
+        '401':
+          description: Access token is missing or invalid
+        '404':
+          description: Track was not found
+      tags:
+        - Track
+  '/artist':
+    get:
+      operationId: ArtistController_findMany
+      summary: Get all artists
+      description: Gets all artists
+      parameters: []
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  '$ref': '#/components/schemas/ArtistEntity'
+        '401':
+          description: Access token is missing or invalid
+      tags:
+        - Artist
+    post:
+      operationId: ArtistController_create
+      summary: Add new artist
+      description: Add new artist
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/CreateArtistDTO'
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/ArtistEntity'
+        '400':
+          description: Bad request. body does not contain required fields
+        '401':
+          description: Access token is missing or invalid
+      tags:
+        - Artist
+  '/artist/{id}':
+    get:
+      operationId: ArtistController_findOne
+      summary: Get single artist by id
+      description: Gets single artist by id
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/ArtistEntity'
+        '400':
+          description: Bad request. trackId is invalid (not uuid)
+        '401':
+          description: Access token is missing or invalid
+        '404':
+          description: Artist was not found.
+      tags:
+        - Artist
+    put:
+      operationId: ArtistController_change
+      summary: Update artist information
+      description: Update artist information by UUID
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/ChangeArtistDTO'
+      responses:
+        '200':
+          description: The artist has been updated.
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/ArtistEntity'
+        '400':
+          description: Bad request. trackId is invalid (not uuid)
+        '401':
+          description: Access token is missing or invalid
+        '404':
+          description: Artist was not found
+      tags:
+        - Artist
+    delete:
+      operationId: ArtistController_delete
+      summary: Delete artist
+      description: Delete artist from library
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleled succesfully
+        '400':
+          description: Bad request. trackId is invalid (not uuid)
+        '401':
+          description: Access token is missing or invalid
+        '404':
+          description: Artist was not found
+      tags:
+        - Artist
+  '/album':
+    get:
+      operationId: AlbumController_findMany
+      summary: Get albums list
+      description: Gets all library albums list
+      parameters: []
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  '$ref': '#/components/schemas/AlbumEntity'
+        '401':
+          description: Access token is missing or invalid
+      tags:
+        - Album
+    post:
+      operationId: AlbumController_create
+      summary: Add new album
+      description: Add new album information
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/CreateAlbumDTO'
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/AlbumEntity'
+        '400':
+          description: Bad request. body does not contain required fields
+        '401':
+          description: Access token is missing or invalid
+      tags:
+        - Album
+  '/album/{id}':
+    get:
+      operationId: AlbumController_findOne
+      summary: Get single album by id
+      description: Gets single album by id
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/AlbumEntity'
+        '400':
+          description: Bad request. albumId is invalid (not uuid)
+        '401':
+          description: Access token is missing or invalid
+        '404':
+          description: Album was not found
+      tags:
+        - Album
+    put:
+      operationId: AlbumController_change
+      summary: Update album information
+      description: Update library album information by UUID
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/ChangeAlbumDTO'
+      responses:
+        '200':
+          description: The album has been updated.
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/AlbumEntity'
+        '400':
+          description: Bad request. albumId is invalid (not uuid)
+        '401':
+          description: Access token is missing or invalid
+        '404':
+          description: Album was not found
+      tags:
+        - Album
+    delete:
+      operationId: AlbumController_delete
+      summary: Delete album
+      description: Delete album from library
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleled succesfully
+        '400':
+          description: Bad request. albumId is invalid (not uuid)
+        '401':
+          description: Access token is missing or invalid
+        '404':
+          description: Album was not found
+      tags:
+        - Album
+  '/favs':
+    get:
+      operationId: FavouritesProvider_findMany
+      summary: Get all favorites
+      description: Gets all favorites albums, tracks and artists
+      parameters: []
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/FavoritesEntity'
+        '401':
+          description: Access token is missing or invalid
+      tags:
+        - Favorites
+  '/favs/track/{id}':
+    post:
+      operationId: FavouritesProvider_addFavTrack
+      summary: Add track to the favorites
+      description: Add track to the favorites
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Added succesfully
+        '400':
+          description: Bad. trackId is invalid (not uuid)
+        '401':
+          description: Access token is missing or invalid
+        '422':
+          description: Track with id doesn't exist.
+      tags:
+        - Favorites
+    delete:
+      operationId: FavouritesProvider_deleteFavTrack
+      summary: Delete track from favorites
+      description: Delete track from favorites
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Deleted succesfully
+        '400':
+          description: Bad request. trackId is invalid (not uuid)
+        '401':
+          description: Access token is missing or invalid
+        '404':
+          description: Track was not found.
+      tags:
+        - Favorites
+  '/favs/album/{id}':
+    post:
+      operationId: FavouritesProvider_addFavAlbum
+      summary: Add album to the favorites
+      description: Add album to the favorites
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Added succesfully
+        '400':
+          description: Bad. albumId is invalid (not uuid)
+        '401':
+          description: Access token is missing or invalid
+        '422':
+          description: Album with id doesn't exist.
+      tags:
+        - Favorites
+    delete:
+      operationId: FavouritesProvider_deleteFavAlbum
+      summary: Delete album from favorites
+      description: Delete album from favorites
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Deleted succesfully
+        '400':
+          description: Bad request. albumId is invalid (not uuid)
+        '401':
+          description: Access token is missing or invalid
+        '404':
+          description: Album was not found.
+      tags:
+        - Favorites
+  '/favs/artist/{id}':
+    post:
+      operationId: FavouritesProvider_addFavArtist
+      summary: Add artist to the favorites
+      description: Add artist to the favorites
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Added succesfully
+        '400':
+          description: Bad. artistId is invalid (not uuid)
+        '401':
+          description: Access token is missing or invalid
+        '422':
+          description: Artist with id doesn't exist.
+      tags:
+        - Favorites
+    delete:
+      operationId: FavouritesProvider_deleteFavArtist
+      summary: Delete artist from favorites
+      description: Delete artist from favorites
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Deleted succesfully
+        '400':
+          description: Bad request. artistId is invalid (not uuid)
+        '401':
+          description: Access token is missing or invalid
+        '404':
+          description: Artist was not found.
+      tags:
+        - Favorites
+info:
+  title: Home Library Service
+  description: Home music library service
+  version: 1.0.0
+  contact: {}
+tags: []
+servers:
+  - url: 'http://localhost:4000/'
+components:
+  schemas:
+    UserEntity:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        login:
+          type: string
+          example: TestUser
+        version:
+          type: number
+          example: 1
+        createdAt:
+          type: number
+          example: 1675531828326
+        updatedAt:
+          type: number
+          example: 1675531828326
+      required:
+        - id
+        - login
+        - version
+        - createdAt
+        - updatedAt
+    CreateUserDTO:
+      type: object
+      properties:
+        login:
+          type: string
+        password:
+          type: string
+      required:
+        - login
+        - password
+    UpdatePasswordDto:
+      type: object
+      properties:
+        oldPassword:
+          type: string
+        newPassword:
+          type: string
+      required:
+        - oldPassword
+        - newPassword
+    TrackEntity:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: The Show Must Go On
+        artistId:
+          type: string
+          format: uuid
+        albumId:
+          type: string
+          format: uuid
+        duration:
+          type: number
+          example: '262'
+      required:
+        - id
+        - name
+        - artistId
+        - albumId
+        - duration
+    CreateTrackDTO:
+      type: object
+      properties:
+        name:
+          type: string
+        artistId:
+          type: string
+          format: uuid
+        albumId:
+          type: string
+          format: uuid
+        duration:
+          type: number
+      required:
+        - name
+        - artistId
+        - albumId
+        - duration
+    ChangeTrackDTO:
+      type: object
+      properties:
+        name:
+          type: string
+        artistId:
+          type: string
+          format: uuid
+        albumId:
+          type: string
+          format: uuid
+        duration:
+          type: number
+      required:
+        - name
+        - artistId
+        - albumId
+        - duration
+    ArtistEntity:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: Freddie Mercury
+        grammy:
+          type: boolean
+      required:
+        - id
+        - name
+        - grammy
+    CreateArtistDTO:
+      type: object
+      properties:
+        name:
+          type: string
+        grammy:
+          type: boolean
+      required:
+        - name
+        - grammy
+    ChangeArtistDTO:
+      type: object
+      properties:
+        name:
+          type: string
+        grammy:
+          type: boolean
+      required:
+        - name
+        - grammy
+    AlbumEntity:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: Innuendo
+        year:
+          type: number
+          example: '1991'
+        artistId:
+          type: string
+          format: uuid
+      required:
+        - id
+        - name
+        - year
+        - artistId
+    CreateAlbumDTO:
+      type: object
+      properties:
+        name:
+          type: string
+        year:
+          type: number
+        artistId:
+          type: string
+          format: uuid
+      required:
+        - name
+        - year
+        - artistId
+    ChangeAlbumDTO:
+      type: object
+      properties:
+        name:
+          type: string
+        year:
+          type: number
+        artistId:
+          type: string
+          format: uuid
+      required:
+        - name
+        - year
+        - artistId
+    FavoritesEntity:
+      type: object
+      properties:
+        artists:
+          type: array
+          items:
+            '$ref': '#/components/schemas/ArtistEntity'
+        albums:
+          type: array
+          items:
+            '$ref': '#/components/schemas/AlbumEntity'
+        tracks:
+          type: array
+          items:
+            '$ref': '#/components/schemas/TrackEntity'
+      required:
+        - artists
+        - albums
+        - tracks
