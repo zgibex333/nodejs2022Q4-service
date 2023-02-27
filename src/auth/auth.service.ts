@@ -64,6 +64,9 @@ export class AuthService {
         id: userId,
       },
     });
+
+    if(!userWithRt) throw new ForbiddenException()
+    
     const { refreshToken: rToken } = dto;
     if (!rToken) throw new UnauthorizedException();
     const bodyTokenIsValid = await bcrypt.compare(rToken, userWithRt.refreshToken);
